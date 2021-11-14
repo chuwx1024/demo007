@@ -30,7 +30,7 @@
     <p>
       开始时间: <span>{{value3[0] | renderTime }}</span><br/>
       结束时间: <span>{{ value3[1] | renderTime }}</span><br/>
-      结束时间: <span>{{ value3[1] | cancelTime }}</span>
+      <!-- 结束时间: <span>{{ value3[1] | cancelTime }}</span> -->
     </p>
 
     <el-date-picker
@@ -43,7 +43,9 @@
       end-placeholder="结束日期">
     </el-date-picker>
     <h4>倒计时----</h4>
-    <span></span>
+    <span>{{ time }}</span><br/>
+    123
+    <span>{{ '2021-11-14 21:46:10' | cancelTime }}</span>
   </div>
 </template>
 
@@ -51,7 +53,9 @@
 export default {
   data () {
     return {
-      time: 0,
+      h: 23,
+      m: 59,
+      s: 59,
       abc: null,
       value1: '',
       value2: '',
@@ -105,16 +109,64 @@ export default {
           }
         ]
 
-      }
+      },
+      nowTime: new Date()
     }
   },
   created () {
+    setInterval(() => {
+      this.nowTime = new Date()
+    }, 1000)
+  },
+  mounted () {
+    console.log('00000000000')
+  },
+  updated () {
+    console.log('updated')
+  },
+  computed: {
+    time () {
+      const getTime = Date.parse('2021-11-14 21:46:10') // 开始时间
+      const oneDay = 24 * 3600 * 1000 // 一天时间
+      const time = this.nowTime // 当前时间
+      const rangeTime = getTime + oneDay
+      if (rangeTime > time) {
+        const newTime = (rangeTime - time) / 1000
+        // const days = Math.floor(newTime / (24 * 3600))
+
+        const hour = Math.floor(newTime / 3600)
+        const live = newTime % 3600
+        const minutes = Math.floor(live / 60)
+        const seconds = Math.floor(live % 60)
+        console.log(hour)
+        console.log(minutes)
+        console.log(seconds)
+        return `${hour > 9 ? hour : ('0' + hour)}:${minutes}:${seconds > 9 ? seconds : ('0' + seconds)}`
+      }
+      return '已超时'
+    }
+
   },
   methods: {
     changeTime () {
       this.midTime = ''
-      console.log(this.value3)
+    },
+    countDownTIme (data) {
+      --this.s
+      if (this.s < 0) {
+        --this.m
+        this.s = 59
+      }
+      if (this.m < 0) {
+        --this.h
+        this.m = 59
+      }
+      if (this.h < 0) {
+        this.s = 0
+        this.m = 0
+      }
     }
+
   }
 
 }
