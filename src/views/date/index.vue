@@ -28,8 +28,9 @@
       placeholder="选择日期">
     </el-date-picker>
     <p>
-      开始时间: <span>{{value2[0] }}</span><br/>
-      结束时间: <span>{{ value2[1] }}</span>
+      开始时间: <span>{{value3[0] | renderTime }}</span><br/>
+      结束时间: <span>{{ value3[1] | renderTime }}</span><br/>
+      结束时间: <span>{{ value3[1] | cancelTime }}</span>
     </p>
 
     <el-date-picker
@@ -41,6 +42,8 @@
       @change='changeTime'
       end-placeholder="结束日期">
     </el-date-picker>
+    <h4>倒计时----</h4>
+    <span></span>
   </div>
 </template>
 
@@ -48,6 +51,7 @@
 export default {
   data () {
     return {
+      time: 0,
       abc: null,
       value1: '',
       value2: '',
